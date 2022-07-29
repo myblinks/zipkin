@@ -41,6 +41,10 @@ You can also start Zipkin via Docker.
 ```bash
 # Note: this is mirrored as ghcr.io/openzipkin/zipkin
 docker run -d -p 9411:9411 openzipkin/zipkin
+
+add config with server lower memmory:
+
+sudo sysctl -w vm.max_map_count=262144
 ```
 
 Once the server is running, you can view traces with the Zipkin UI at `http://your_host:9411/zipkin/`.
