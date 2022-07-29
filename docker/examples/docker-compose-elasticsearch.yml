@@ -18,17 +18,43 @@
 # It extends the default configuration from docker-compose.yml to run the
 # zipkin-elasticsearch container instead of the zipkin-mysql container.
 
-version: '2.4'
+version: '3.8'
 
 services:
+  kafka-zookeeper:
+    image: ghcr.io/openzipkin/zipkin-kafka:${TAG:-latest}
+    container_name: kafka-zookeeper
+    # If using docker machine, uncomment the below and set your bootstrap
+    # server list to 192.168.99.100:19092
+    # environment:
+    # - KAFKA_ADVERTISED_HOST_NAME=192.168.99.100
+    ports:
+      # Processes on the Docker host can set bootstrap server list to localhost:19092
+      - 19092:19092
   storage:
+    # image: docker.elastic.co/elasticsearch/elasticsearch:8.3.2
     image: ghcr.io/openzipkin/zipkin-elasticsearch7:${TAG:-latest}
     container_name: elasticsearch
     # Uncomment to expose the storage port for testing
     # ports:
     #   - 9200:9200
 
-  # Use Elasticsearch instead of in-memory storage
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.11.2
+    container_name: kibana
+    depends_on:
+      - storage
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://storage:9200
+      ELASTICSEARCH_HOSTS: '["http://storage:9200"]'
+      xpack.security.enabled: "false"
+      # discovery.type: "single-node"
+      # extra_hosts:
+      #   - "host.docker.internal:127.0.0.1"
+
+      # Use Elasticsearch instead of in-memory storage
   zipkin:
     extends:
       file: docker-compose.yml

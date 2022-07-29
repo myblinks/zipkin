@@ -18,7 +18,7 @@
 # It extends the default configuration from docker-compose.yml to add a test
 # kafka server, which is used as a span transport.
 
-version: '2.4'
+version: '3.8'
 
 services:
   kafka-zookeeper:

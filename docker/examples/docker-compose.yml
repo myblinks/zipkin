@@ -20,7 +20,7 @@
 #
 # Note that this file is meant for learning Zipkin, not production deployments.
 
-version: '2.4'
+version: '3.8'
 
 services:
   # The zipkin process services the UI, and also exposes a POST endpoint that
@@ -28,6 +28,9 @@ services:
   zipkin:
     image: ghcr.io/openzipkin/zipkin-slim:${TAG:-latest}
     container_name: zipkin
+    # extends:
+    #   file: docker-compose-kafka.yml
+    #   service: kafka-zookeeper
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     environment:
       - STORAGE_TYPE=mem
@@ -37,9 +40,11 @@ services:
       # - SELF_TRACING_ENABLED=true
       # Uncomment to increase heap size
       # - JAVA_OPTS=-Xms128m -Xmx128m -XX:+ExitOnOutOfMemoryError
+      # - KAFKA_BOOTSTRAP_SERVERS=kafka-zookeeper:9092
     ports:
       # Port used for the Zipkin UI and HTTP Api
       - 9411:9411
+      # - 9200:9200
     # Uncomment to enable debug logging
     # command: --logging.level.zipkin2=DEBUG
 

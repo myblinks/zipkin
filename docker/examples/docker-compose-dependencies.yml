@@ -12,7 +12,7 @@
 # the License.
 #
 
-version: '2.4'
+version: '3.8'
 
 services:
   # Adds a cron to process spans since midnight every hour, and all spans each day
