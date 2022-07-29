@@ -146,8 +146,8 @@ services:
         soft: -1
         hard: -1
       nofile:
-        soft: 65536
-        hard: 65536
+        soft: 262144
+        hard: 262144
     # Use Elasticsearch instead of in-memory storage
   zipkin:
     extends:
